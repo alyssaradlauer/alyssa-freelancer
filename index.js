@@ -51,8 +51,70 @@ function avgRate(genFreelancer) {
   const avg = sum / genFreelancer.length;
   return avg;
 }
+const avgStateRate = avgRate(genFreelancer);
 console.log(
   "The average rate of all freelancers in the state is:",
-  avgRate(genFreelancer),
+  avgStateRate,
   "USD."
 );
+
+/////////////// Component Functions ///////////////
+
+function freelancerCard(freelancer) {
+  const $card = document.createElement("article"); //create container - use createElement since it does not already exist in the HTML file
+  $card.classList.add("freelancer"); //adds a class to the div
+  //freelancers information from the object - put into HTML
+  $card.innerHTML = `
+    <h3>${freelancer.Name}<h3>
+    <p>${freelancer.Occupation}</p>
+    <p>Rate: $${freelancer.Price} per hour</p>
+    `;
+  return $card;
+}
+
+function freelancerArray(freelancers) {
+  const $section = document.createElement("section");
+  $section.classList.add("freelancer-list");
+  $section.innerHTML = freelancers
+    .map((freelancer) => {
+      return `
+    <article class="freelancer">
+    <h3>${freelancer.Name}</h3>
+    <p>${freelancer.Occupation}</p>
+    <p>Rate: $${freelancer.Price} per hour</p>
+    </article>
+    `;
+    })
+    .join(""); //join array of strings into one HTML block without commas
+  return $section;
+}
+
+function avgRateComp(avgRate) {
+  const $avg = document.createElement("div");
+  $avg.classList.add("average-rate");
+  $avg.innerHTML = `
+    <h2>Average Rate</h2>
+    <p>The average rate of all freelancers is: <strong>$${avgRate}</strong> per hour.</p>
+    `;
+  return $avg;
+}
+
+function render() {
+  //select element where the app goes
+  const $app = document.querySelector("#app");
+
+  const average = avgRate(genFreelancer);
+
+  $app.innerHTML = "";
+  $app.innerHTML = `
+    <h1>Freelancer Directory</h1>
+    
+    <section class="average-rate">
+    <h2>Average Rate </h2>
+    <p>The average rate of all freelancers is:
+    <strong>$${average}</strong> per hour.</p>
+    </section>
+    ${freelancerArray(genFreelancer).outerHTML}
+    `;
+}
+render();
